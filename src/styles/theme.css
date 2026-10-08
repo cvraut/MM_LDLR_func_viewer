@@ -1,0 +1,37 @@
+/*
+ * src/styles/theme.css
+ * ----------------------------------------------------------------------------
+ * Every color, font and key size used by the app. Change the look here.
+ * Track colors themselves come from tracks.config.ts, not from this file.
+ *
+ * Canvas drawings (axis, ticks, sequence hint) read these variables too, so
+ * a change here restyles both the HTML and the drawn parts.
+ */
+:root {
+  /* Palette */
+  --bg: #ffffff;            /* page and track background */
+  --ink: #1d2127;           /* main text, axis, scale bar */
+  --muted: #6a717c;         /* secondary text, tick labels */
+  --hairline: #e4e6ea;      /* light rules and borders */
+  --hairline-strong: #c9ccd1; /* axis baseline, dense-row center lines */
+  --surface: #f6f7f8;       /* hover backgrounds, chips */
+  --accent: #2c6db5;        /* focus, selection, drop line, current tab */
+  --accent-soft: rgba(44, 109, 181, 0.12);
+
+  /* Type */
+  --font-sans: "Helvetica Neue", Helvetica, Arial, "Nimbus Sans", "Liberation Sans", sans-serif;
+  --font-size: 13px;
+  --track-label-size: 12px;
+
+  /* Layout */
+  --gutter-width: 190px;    /* left column holding track names and y-axes */
+  --page-pad: 24px;         /* space left/right of the viewer */
+  --radius: 4px;
+}
+
+@media (max-width: 700px) {
+  :root {
+    --gutter-width: 128px;
+    --page-pad: 12px;
+  }
+}
