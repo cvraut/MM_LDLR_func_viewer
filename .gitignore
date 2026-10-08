@@ -3,3 +3,6 @@ genome-browser.zip
 
 # undisclosed data
 tracks/emmer_data
+
+# node
+node_modules/

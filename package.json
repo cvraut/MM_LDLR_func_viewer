@@ -1,0 +1,25 @@
+{
+  "name": "single-file-genome-browser",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A client-side genome browser that builds into one self-contained HTML file with your WIG/bedGraph/BED tracks bundled inside.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "demo-data": "tsx scripts/make-demo-data.ts"
+  },
+  "devDependencies": {
+    "@types/markdown-it": "^14.2.0",
+    "@types/node": "^22.20.5",
+    "markdown-it": "^14.3.2",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3",
+    "vite": "^5.4.21",
+    "vite-plugin-singlefile": "^2.3.3",
+    "vitest": "^2.1.9"
+  }
+}
