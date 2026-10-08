@@ -6,3 +6,4 @@ tracks/emmer_data
 
 # node
 node_modules/
+package-lock.json

@@ -15,21 +15,38 @@ tracks.config.ts (optional)                     ─┘
 
 ## Contents
 
-1. [Quick start](#1-quick-start)
-2. [Adding your own data](#2-adding-your-own-data)
-3. [tracks.config.ts reference](#3-tracksconfigts-reference)
-4. [Genome files](#4-genome-files)
-5. [Help pages and images](#5-help-pages-and-images)
-6. [Using the viewer](#6-using-the-viewer)
-7. [What each file does](#7-what-each-file-does)
-8. [How it works](#8-how-it-works)
-9. [Changing the look](#9-changing-the-look)
-10. [Large data](#10-large-data)
-11. [Troubleshooting](#11-troubleshooting)
+- [Single-file genome browser](#single-file-genome-browser)
+  - [Contents](#contents)
+  - [1. Quick start](#1-quick-start)
+  - [2. Adding your own data](#2-adding-your-own-data)
+    - [Track ids](#track-ids)
+    - [Pairing a signal with its peaks](#pairing-a-signal-with-its-peaks)
+  - [3. `tracks.config.ts` reference](#3-tracksconfigts-reference)
+    - [Top-level settings](#top-level-settings)
+    - [Per-track settings](#per-track-settings)
+  - [4. Genome files](#4-genome-files)
+  - [5. Help pages and images](#5-help-pages-and-images)
+    - [Images](#images)
+  - [6. Using the viewer](#6-using-the-viewer)
+  - [7. What each file does](#7-what-each-file-does)
+  - [8. How it works](#8-how-it-works)
+    - [Build time (`build/`)](#build-time-build)
+    - [Run time (`src/`)](#run-time-src)
+    - [Coordinates](#coordinates)
+  - [9. Changing the look](#9-changing-the-look)
+  - [10. Large data](#10-large-data)
+  - [11. Troubleshooting](#11-troubleshooting)
 
 ---
 
 ## 1. Quick start
+
+Windows:
+
+```powershell
+nvm install 11.19.1
+nvm use 11
+```
 
 Requirements: [Node.js](https://nodejs.org) 18 or newer.
 
