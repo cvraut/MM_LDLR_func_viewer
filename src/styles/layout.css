@@ -265,7 +265,7 @@ canvas { display: block; }
 }
 
 /* -------------------------------------------------------- small screens -- */
-@media (max-width: 700px) {
+@media (max-width: 845px) {
   .pos-input { width: 200px; }
   .zoom { margin-left: auto; display: flex; align-items: center; gap: 8px; flex: 1 1 220px; min-width: 0; }
   .zoom-slider { flex: 1; min-width: 60px; width: auto; accent-color: var(--accent); }
