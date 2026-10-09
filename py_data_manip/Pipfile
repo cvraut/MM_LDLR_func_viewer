@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+numpy = "*"
+pandas = "*"        # BED / bedGraph as tables (read_csv with sep="\t")
+pyfaidx = "*"       # indexed FASTA access, region slicing
+requests = "*"      # UCSC / Ensembl REST calls
+matplotlib = "*"
+jupyterlab = "*"
+ipykernel = "*"
+
+[dev-packages]
+pytest = "*"
+
+[requires]
+python_version = "3.14"
