@@ -267,11 +267,16 @@ canvas { display: block; }
 /* -------------------------------------------------------- small screens -- */
 @media (max-width: 700px) {
   .pos-input { width: 200px; }
-  .zoom { margin-left: 0; width: 100%; }
-  .zoom-slider { flex: 1; }
+  .zoom { margin-left: auto; display: flex; align-items: center; gap: 8px; flex: 1 1 220px; min-width: 0; }
+  .zoom-slider { flex: 1; min-width: 60px; width: auto; accent-color: var(--accent); }
   .page-help { grid-template-columns: 1fr; gap: 16px; }
   .toc { position: static; max-height: none; }
   .track-label { right: 50px; max-width: calc(var(--gutter-width) - 54px); }
   /* Touch screens apply :hover on tap, so tapping a track's left side reveals × */
   .track-tools .grip { display: none; }
 }
+
+.toc summary { cursor: pointer; }
+.toc summary:hover { color: var(--ink); }
+.toc ul ul summary a { display: inline; }
+.toc summary > a { display: inline; padding-left: 4px; }

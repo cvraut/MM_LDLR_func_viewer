@@ -16,12 +16,23 @@ export interface HelpPage {
 export function createHelpPage(help: HelpBundle): HelpPage {
   const el = document.createElement('section');
   el.className = 'page page-help';
-  const tocHtml = (entries: TocEntry[]): string =>
-    `<ul>${entries.map((e) => `<li><a href="${helpHash(e.id)}" data-id="${e.id}">${escapeHtml(e.text)}</a>${e.children.length ? tocHtml(e.children) : ''}</li>`).join('')}</ul>`;
+    const tocHtml = (entries: TocEntry[]): string =>
+    `<ul>${entries.map((e) => {
+      const link = `<a href="${helpHash(e.id)}" data-id="${e.id}">${escapeHtml(e.text)}</a>`;
+      if (!e.children.length) return `<li>${link}</li>`;
+      return `<li><details ><summary>${link}</summary>${tocHtml(e.children)}</details></li>`;
+    }).join('')}</ul>`;
   el.innerHTML = `
-    <nav class="toc" aria-label="Contents"><h2 class="toc-title">Contents</h2>${tocHtml(help.toc)}</nav>
+    <nav class="toc" aria-label="Contents">
+      <details class="toc-details" open>
+        <summary class="toc-title">Contents</summary>
+        ${tocHtml(help.toc)}
+      </details>
+    </nav>
     <article class="help-content">${help.html}</article>`;
-
+  if (window.matchMedia('(max-width: 700px)').matches) {
+    el.querySelector<HTMLDetailsElement>('.toc-details')!.open = false;
+  }
   const content = el.querySelector<HTMLElement>('.help-content')!;
   const links = new Map([...el.querySelectorAll<HTMLAnchorElement>('.toc a')].map((a) => [a.dataset.id!, a]));
 

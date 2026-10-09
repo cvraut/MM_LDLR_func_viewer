@@ -55,7 +55,7 @@ export default defineConfig({
 
     'MPRA_normalized-activity.wig':{"label":"MPRA activity (relative)", color:"#da6406", altColor: "#fdc07f", yLabel:"log_{2}FC", height: 72, autoscaleGroup:"mpra", marginTop:10, centerLabel: true},
     'MPRA_activator-peaks.bed': {"label":"Enhancers", color:"#da6406", mode: 'dense', marginTop: 2},
-    'MPRA_repressor-peaks.bed': {"label":"Repressors", color:"#da6406", mode: 'dense', marginTop: 2},
+    'MPRA_repressor-peaks.bed': {"label":"Repressors", color:"#fdc07f", mode: 'dense', marginTop: 2},
     
     // // Gene models on top, no label (like a figure).
     // 'demo_genes.bed': { label: '', color: '#1d2127', mode: 'full', featureLabels: false, marginTop: 2 },
