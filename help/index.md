@@ -20,7 +20,7 @@ Click any track name in the viewer to jump to its section below. The [SPRn secti
 | Alt / option + scroll over the tracks | Zoom in or out around the pointer |
 | Drag across the tracks | Zoom to the region you selected |
 | Double-click | Zoom out 3× around the pointer |
-| Type in the position box | Jump to `chr7:55,100,001-55,150,000` or a chromosome name |
+| Type in the position box | Jump to `chr19:11,089,082-11,092,493` |
 | Zoom slider, top right | Zoom from a whole chromosome down to single bases |
 | ← / → keys | Move 10% left or right |
 
@@ -34,3 +34,7 @@ At the highest zoom the sequence track shows individual bases.
 - **Display options:** right-click a track name to change how it is drawn.
 
 Your arrangement is remembered in this browser. **Reset view** in the toolbar restores the original layout and position.
+
+## CRISPR enrichment and depletion diagram
+
+![Schematic of the CRISPR tracks](images/crispr_fig.png "Figure 2: Graphical overview for the CRISPRn/i/a tracks")
