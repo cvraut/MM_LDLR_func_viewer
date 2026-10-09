@@ -40,6 +40,8 @@ export interface TrackOptions {
   centerLine?: boolean;
   /** Show feature names in pack/full mode (default true). */
   featureLabels?: boolean;
+  /** Center the track name vertically on the track instead of aligning it to the top. */
+    centerLabel?: boolean;
 }
 
 export interface BrowserConfig {
@@ -80,7 +82,7 @@ export const DEFAULT_PALETTE = [
 
 const TRACK_KEYS: (keyof TrackOptions)[] = [
   'label', 'color', 'altColor', 'height', 'marginTop', 'yLabel', 'viewLimits', 'autoscaleGroup',
-  'windowing', 'graphType', 'mode', 'hidden', 'itemRgb', 'centerLine', 'featureLabels',
+  'windowing', 'graphType', 'mode', 'hidden', 'itemRgb', 'centerLine', 'featureLabels', 'centerLabel',
 ];
 const TOP_KEYS: (keyof BrowserConfig)[] = [
   'title', 'subtitle', 'defaultPosition', 'genome', 'sequenceTrack', 'maxDataMB', 'tracks', 'tracksDir',

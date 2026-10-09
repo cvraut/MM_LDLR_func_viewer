@@ -58,7 +58,7 @@ export function parseChromSizes(text: string): ChromInfo[] {
 const DEFAULT_STYLE: Omit<TrackStyle, 'label' | 'color' | 'altColor'> = {
   height: 50, marginTop: 6, yLabel: '', viewLimits: null, autoscaleGroup: null,
   windowing: 'max', graphType: 'bar', mode: 'pack', hidden: false, itemRgb: false,
-  centerLine: false, featureLabels: true, description: '',
+  centerLine: false, featureLabels: true, description: '', centerLabel: false,
 };
 
 async function loadUserConfig(root: string): Promise<{ config: BrowserConfig; file: string | null }> {

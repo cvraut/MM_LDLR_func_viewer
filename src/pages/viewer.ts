@@ -47,6 +47,9 @@ interface Row {
   label: HTMLAnchorElement;
   yaxis: HTMLCanvasElement;
   canvas: HTMLCanvasElement;
+  /** Untruncated label text, and how many lines it was last fitted to (0 = refit). */
+  fullLabel: string;
+  labelLines: number;
 }
 
 type Hit =
@@ -135,6 +138,30 @@ export function createViewer(store: Store, defaultPosition: string): Viewer {
   const bpPerPx = () => (store.view.end - store.view.start) / store.dataWidth;
   const dataLeft = () => axisData.getBoundingClientRect().left;
   const posAtClientX = (clientX: number) => store.view.start + (clientX - dataLeft()) * bpPerPx();
+
+  /** Keep in sync with .track-label line-height in layout.css. */
+  const LABEL_LINE_HEIGHT = 14;
+  /** Let a track name use as many lines as the track is tall; "…" after that. */
+  function setLabelLines(r: Row, trackHeight: number) {
+    const lines = Math.max(1, Math.floor(trackHeight / LABEL_LINE_HEIGHT));
+    if (lines === r.labelLines) return;                   // already fitted for this height
+    r.labelLines = lines;
+    const el = r.label;
+    const fits = () => el.scrollHeight <= el.clientHeight + 1;
+    el.style.maxHeight = `${lines * LABEL_LINE_HEIGHT}px`;
+    el.textContent = r.fullLabel;
+    if (fits()) return;
+    // Binary search for the longest prefix that fits with "…"
+    let lo = 0;
+    let hi = r.fullLabel.length;
+    while (lo < hi) {
+      const mid = (lo + hi + 1) >> 1;
+      el.textContent = r.fullLabel.slice(0, mid).trimEnd() + '…';
+      if (fits()) lo = mid;
+      else hi = mid - 1;
+    }
+    el.textContent = r.fullLabel.slice(0, lo).trimEnd() + '…';
+  }
 
   function scheduleRender() {
     if (rafPending || !active) return;
@@ -244,6 +271,8 @@ export function createViewer(store: Store, defaultPosition: string): Viewer {
       label,
       yaxis: row.querySelector<HTMLCanvasElement>('.yaxis')!,
       canvas: row.querySelector<HTMLCanvasElement>('.data-canvas')!,
+      fullLabel: '',
+      labelLines: 0,
     };
   }
 
@@ -284,8 +313,9 @@ export function createViewer(store: Store, defaultPosition: string): Viewer {
       let r = rows.get(t.id);
       if (!r) rows.set(t.id, (r = makeRow(t)));
       const s = store.styleOf(t);
-      r.label.textContent = s.label;
+      if (r.fullLabel !== s.label) { r.fullLabel = s.label; r.labelLines = 0; }
       r.label.style.color = resolveColor(s.color);
+      r.label.classList.toggle('centered', s.centerLabel);
       r.el.style.marginTop = `${i === 0 ? 0 : s.marginTop}px`;
       r.el.dataset.kind = t.kind;
       if (stack.children[i] !== r.el) stack.insertBefore(r.el, stack.children[i] ?? null);
@@ -345,6 +375,7 @@ export function createViewer(store: Store, defaultPosition: string): Viewer {
         const ctx = sizeCanvas(r.canvas, w, s.height);
         if (sum) drawSignal(ctx, sum, s, range, w, s.height);
         drawYAxis(sizeCanvas(r.yaxis, YAXIS_W, s.height), s, range, YAXIS_W, s.height);
+        setLabelLines(r, s.height);
         hits.set(t.id, { kind: 'signal', sum });
       } else if (t.kind === 'bed') {
         const d = t.bed(chrom);
@@ -354,11 +385,13 @@ export function createViewer(store: Store, defaultPosition: string): Viewer {
         const ctx = sizeCanvas(r.canvas, w, lay.height);
         drawBed(ctx, lay, s, start, bp, w);
         sizeCanvas(r.yaxis, YAXIS_W, lay.height);
+        setLabelLines(r, lay.height);
         hits.set(t.id, { kind: 'bed', layout: lay });
       } else {
         const h = s.height;
         drawSequence(sizeCanvas(r.canvas, w, h), t.sequence(chrom), start, bp, w, h);
         sizeCanvas(r.yaxis, YAXIS_W, h);
+        setLabelLines(r, h);
         hits.set(t.id, { kind: 'sequence' });
       }
     }

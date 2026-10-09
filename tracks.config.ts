@@ -24,16 +24,39 @@ const GREEN = '#1a9e77';
 const GRAY = '#5f6368';
 
 export default defineConfig({
-  title: 'Demo Genome Browser',
-  subtitle: 'Synthetic example data on hg38',
+  title: 'LDLR Locus Browser',
+  subtitle: 'Multimodal functional characterization of the <i>LDLR</i> locus',
   defaultPosition: 'chr19:11,039,463-11,163,820',
   genome: {
     chromSizes: 'genome/chrom.sizes',
     fasta: 'genome/hg38_ldlr_region.fa',
   },
   tracks: {
-    'genes_coding.bed':    { label: '', color: '#1d2127', mode: 'pack', marginTop: 2 },
+    'genes_coding.bed':    { label: 'canonical genes', color: '#1d2127', mode: 'pack', marginTop: 2 },
     'genes_noncoding.bed': { label: 'ncRNA', color: '#9aa0a6', mode: 'pack', marginTop: 2, hidden: true },
+
+    'CRISPRn_neglog-pDeplete.wig':{"label":"CRISPRn depletion ", color:"#7570b3", yLabel:"-log_{10} p", height: 52, autoscaleGroup:"spr", marginTop:10, centerLabel: true},
+    'CRISPRn_depletion-peaks.bed': {"label":"", color:"#7570b3", mode: 'dense', marginTop: 2},
+    
+    'CRISPRn_neglog-pEnrich.wig':{"label":"CRISPRn enrichment ", color:"#4b3f87", yLabel:"-log_{10} p", height: 52, autoscaleGroup:"spr", marginTop:10, centerLabel: true},
+    'CRISPRn_enrichment-peaks.bed': {"label":"", color:"#4b3f87", mode: 'dense', marginTop: 2},
+
+    'CRISPRi_neglog-pDeplete.wig':{"label":"CRISPRi depletion ", color:"#e82989", yLabel:"-log_{10} p", height: 52, autoscaleGroup:"spr", marginTop:10, centerLabel: true},
+    'CRISPRi_depletion-peaks.bed': {"label":"", color:"#e82989", mode: 'dense', marginTop: 2},
+    
+    'CRISPRi_neglog-pEnrich.wig':{"label":"CRISPRi enrichment ", color:"#e82989", yLabel:"-log_{10} p", height: 52, autoscaleGroup:"spr", marginTop:10, centerLabel: true},
+    // 'CRISPRi_enrichment-peaks.bed': {"label":"", color:"#e82989", mode: 'dense', marginTop: 2}, // no enrichment peaks for CRISPRi
+
+    'CRISPRa_neglog-pDeplete.wig':{"label":"CRISPRa depletion ", color:"#1b9d79", yLabel:"-log_{10} p", height: 52, autoscaleGroup:"spr", marginTop:10, centerLabel: true},
+    'CRISPRa_depletion-peaks.bed': {"label":"", color:"#1b9d79", mode: 'dense', marginTop: 2},
+    
+    'CRISPRa_neglog-pEnrich.wig':{"label":"CRISPRa enrichment ", color:"#1b9d79", yLabel:"-log_{10} p", height: 52, autoscaleGroup:"spr", marginTop:10, centerLabel: true},
+    'CRISPRa_enrichment-peaks.bed': {"label":"", color:"#1b9d79", mode: 'dense', marginTop: 2},
+
+    'MPRA_normalized-activity.wig':{"label":"MPRA activity (relative)", color:"#da6406", altColor: "#fdc07f", yLabel:"log_{2}FC", height: 72, autoscaleGroup:"mpra", marginTop:10, centerLabel: true},
+    'MPRA_activator-peaks.bed': {"label":"Enhancers", color:"#da6406", mode: 'dense', marginTop: 2},
+    'MPRA_repressor-peaks.bed': {"label":"Repressors", color:"#da6406", mode: 'dense', marginTop: 2},
+    
     // // Gene models on top, no label (like a figure).
     // 'demo_genes.bed': { label: '', color: '#1d2127', mode: 'full', featureLabels: false, marginTop: 2 },
 

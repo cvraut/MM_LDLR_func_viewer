@@ -101,9 +101,11 @@ canvas { display: block; }
 .track-label {
   position: absolute; top: -1px; right: 52px; max-width: calc(var(--gutter-width) - 90px);
   font-size: var(--track-label-size); line-height: 14px; text-decoration: none;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  /* Wrap onto as many lines as the track is tall (set from viewer.ts), then "…" */
+  overflow: hidden; white-space: normal; overflow-wrap: anywhere; text-align: right;
   cursor: grab; user-select: none;
 }
+.track-label.centered { top: 50%; transform: translateY(-50%); }
 .track-label:hover { text-decoration: underline; }
 .yaxis { position: absolute; top: 0; right: 4px; }
 

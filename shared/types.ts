@@ -46,6 +46,8 @@ export interface TrackStyle {
   featureLabels: boolean;
   /** Free-text description (from the `track` line's description=). */
   description: string;
+  /** Center the track name vertically (default: top-aligned). */
+  centerLabel: boolean;
 }
 
 /** One zoom level of the signal pyramid. Only bins that contain data are stored. */

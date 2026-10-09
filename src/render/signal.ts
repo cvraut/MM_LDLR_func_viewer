@@ -139,7 +139,7 @@ export function drawYAxis(
     const size = 10.5;
     const tw = measureRich(ctx, segs, size);
     ctx.save();
-    ctx.translate(11, h / 2 + tw / 2);
+    ctx.translate(15, h / 2 + tw / 2);
     ctx.rotate(-Math.PI / 2);
     drawRich(ctx, segs, 0, 0, size);
     ctx.restore();

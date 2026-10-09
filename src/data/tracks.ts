@@ -35,7 +35,7 @@ export function buildTracks(bundle: Bundle): Track[] {
       style: {
         label: seqBundle.label, color: 'var(--ink)', altColor: 'var(--ink)', height: 16, marginTop: 4, yLabel: '',
         viewLimits: null, autoscaleGroup: null, windowing: 'max', graphType: 'bar', mode: 'full',
-        hidden: seqBundle.hidden, itemRgb: false, centerLine: false, featureLabels: false, description: '',
+        hidden: seqBundle.hidden, itemRgb: false, centerLine: false, featureLabels: false, description: '',centerLabel: false,
       },
       signal: () => null,
       bed: () => null,

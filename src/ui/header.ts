@@ -27,7 +27,7 @@ export function createHeader(title: string, subtitle: string): Header {
     </nav>`;
   el.querySelector('.title')!.textContent = title;
   const sub = el.querySelector<HTMLElement>('.subtitle')!;
-  sub.textContent = subtitle;
+  sub.innerHTML = subtitle;
   sub.hidden = !subtitle;
   const tabs = [...el.querySelectorAll<HTMLAnchorElement>('.tab')];
   return {
