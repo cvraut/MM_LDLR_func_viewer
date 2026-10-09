@@ -11,12 +11,17 @@ import { defineConfig } from 'vite';
 import { viteSingleFile } from 'vite-plugin-singlefile';
 import { fileURLToPath } from 'node:url';
 import { genomeData } from './build/plugin';
+import { versionData } from './build/version-file';
 
 const root = fileURLToPath(new URL('.', import.meta.url));
 
 export default defineConfig({
   root,
-  plugins: [genomeData({ root }), viteSingleFile({ removeViteModuleLoader: true })],
+  plugins: [
+    genomeData({ root }), 
+    viteSingleFile({ removeViteModuleLoader: true }),
+    versionData({ root })
+  ],
   build: {
     target: 'es2020',
     outDir: 'dist',

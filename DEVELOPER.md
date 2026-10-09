@@ -36,6 +36,7 @@ tracks.config.ts (optional)                     ─┘
   - [9. Changing the look](#9-changing-the-look)
   - [10. Large data](#10-large-data)
   - [11. Troubleshooting](#11-troubleshooting)
+  - [12. Unit Testing](#12-unit-testing)
 
 ---
 
@@ -387,3 +388,13 @@ Everything lives in one HTML file that the browser loads into memory, so size ma
 | Old track order after rebuilding | Saved layouts reset automatically when data changes. Otherwise press **Reset view**. |
 | Alt + scroll doesn't zoom on Linux | Some desktops use Alt + drag/scroll for windows. Use the zoom slider or drag-select instead, or change the desktop shortcut. |
 | Page is slow with lots of data | See [Large data](#10-large-data). |
+
+---
+
+## 12. Unit Testing
+
+Run specific tests:
+
+```
+npx vitest run .\tests\build.test.ts
+```
