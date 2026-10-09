@@ -3,6 +3,8 @@ genome-browser.zip
 
 # undisclosed data
 tracks/emmer_data
+tracks/raw_emmer
+tracks/ucsc_raw
 
 # node
 node_modules/
@@ -10,3 +12,7 @@ package-lock.json
 
 # versions
 build-history/
+
+# python
+py_data_manip/Pipfile.lock
+py_data_manip/.venv/

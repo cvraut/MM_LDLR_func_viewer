@@ -15,7 +15,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import zlib from 'node:zlib';
 import crypto from 'node:crypto';
-import { loadConfigFromFile, type Plugin, type ViteDevServer } from 'vite';
+import { loadConfigFromFile, type Plugin, type ViteDevServer, normalizePath } from 'vite';
 import type { Bundle, ChromInfo, SequenceBundle, TrackBundle, TrackFormat, TrackStyle } from '../shared/types';
 import { DEFAULT_PALETTE, suggest, validateConfig, type BrowserConfig, type TrackOptions } from './config-schema';
 import { parseWig } from './parse-wig';
@@ -118,7 +118,7 @@ export async function buildBundle(root: string): Promise<BuildResult> {
   }
 
   // ---- discover tracks ----------------------------------------------------
-  const tracksDir = path.join(root, 'tracks');
+  const tracksDir = path.resolve(root, config.tracksDir ?? 'tracks');
   const files = fs.existsSync(tracksDir)
     ? fs.readdirSync(tracksDir).filter((f) => TRACK_EXT[trackIdFromFile(f).ext]).sort((a, b) => a.localeCompare(b))
     : [];
@@ -259,6 +259,7 @@ export function genomeData(options: { root?: string } = {}): Plugin {
   let root = options.root ?? process.cwd();
   let cached: Promise<BuildResult> | null = null;
   let server: ViteDevServer | null = null;
+  let watched: string[] = [];
 
   const get = () => {
     if (!cached) {
@@ -279,9 +280,12 @@ export function genomeData(options: { root?: string } = {}): Plugin {
     resolveId(id) { return id === VIRTUAL_ID ? RESOLVED_ID : null; },
     async load(id) {
       if (id !== RESOLVED_ID) return null;
-      const { bundle } = await get();
-      // JSON.parse of a string literal is faster for engines than a huge object literal.
-      return `export default JSON.parse(${JSON.stringify(JSON.stringify(bundle))});`;
+      const r = await get();
+      if (server) {
+        watched = r.watched.map((p) => normalizePath(p));
+        server.watcher.add(r.watched);
+      }
+      return `export default JSON.parse(${JSON.stringify(JSON.stringify(r.bundle))});`;
     },
     async transformIndexHtml(html) {
       const { bundle } = await get();
@@ -289,10 +293,11 @@ export function genomeData(options: { root?: string } = {}): Plugin {
     },
     configureServer(s) {
       server = s;
-      const dirs = ['tracks', 'genome', 'help', 'tracks.config.ts'].map((d) => path.join(root, d));
-      s.watcher.add(dirs);
+      watched = ['tracks', 'genome', 'help', 'tracks.config.ts'].map((d) => normalizePath(path.join(root, d)));
+      s.watcher.add(watched);
       const onChange = (file: string) => {
-        if (!dirs.some((d) => file.startsWith(d))) return;
+        const f = normalizePath(file);
+        if (!watched.some((d) => f === d || f.startsWith(d + '/'))) return;
         cached = null;
         const mod = server!.moduleGraph.getModuleById(RESOLVED_ID);
         if (mod) server!.moduleGraph.invalidateModule(mod);

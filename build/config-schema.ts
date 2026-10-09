@@ -64,6 +64,8 @@ export interface BrowserConfig {
   maxDataMB?: number;
   /** Keys are track file names ("atac.bedGraph") or ids (file name without extension). */
   tracks?: Record<string, TrackOptions>;
+  /** Folder scanned for track files, relative to the project root. Default "tracks". */
+  tracksDir?: string;
 }
 
 /** Identity function that gives tracks.config.ts autocomplete and type checking. */
@@ -81,7 +83,7 @@ const TRACK_KEYS: (keyof TrackOptions)[] = [
   'windowing', 'graphType', 'mode', 'hidden', 'itemRgb', 'centerLine', 'featureLabels',
 ];
 const TOP_KEYS: (keyof BrowserConfig)[] = [
-  'title', 'subtitle', 'defaultPosition', 'genome', 'sequenceTrack', 'maxDataMB', 'tracks',
+  'title', 'subtitle', 'defaultPosition', 'genome', 'sequenceTrack', 'maxDataMB', 'tracks', 'tracksDir',
 ];
 const ENUMS: Partial<Record<keyof TrackOptions, readonly string[]>> = {
   windowing: ['max', 'mean', 'min', 'mean+whiskers'],
