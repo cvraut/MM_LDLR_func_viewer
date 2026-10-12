@@ -18,10 +18,14 @@
 import { defineConfig } from './build/config-schema';
 
 // Colors reused for each signal and the peaks tucked underneath it.
-const PURPLE = '#7466b4';
-const PINK = '#e0337f';
-const GREEN = '#1a9e77';
-const GRAY = '#5f6368';
+const PURPLE = '#7570b3';
+const INDIGO = '#4b3f87';
+const PINK = '#e82989';
+const GREEN = '#1b9d79';
+const GRAY = '#9aa0a6';
+const BLACK = '#1d2127';
+const DARKORANGE = '#da6406';
+const LIGHTORANGE = '#fdc07f';
 
 export default defineConfig({
   title: 'LDLR Locus Browser',
@@ -32,30 +36,30 @@ export default defineConfig({
     fasta: 'genome/hg38_ldlr_region.fa',
   },
   tracks: {
-    'genes_coding.bed':    { label: 'canonical genes', color: '#1d2127', mode: 'pack', marginTop: 2 },
-    'genes_noncoding.bed': { label: 'ncRNA', color: '#9aa0a6', mode: 'pack', marginTop: 2, hidden: true },
+    'genes_coding.bed':    { label: 'canonical genes', color: BLACK, mode: 'pack', marginTop: 2 },
+    'genes_noncoding.bed': { label: 'ncRNA', color: GRAY, mode: 'pack', marginTop: 2, hidden: true },
 
-    'CRISPRn_neglog-pDeplete.wig':{"label":"CRISPRn depletion ", color:"#7570b3", yLabel:"-log_{10} p", height: 52, autoscaleGroup:"spr", marginTop:10, centerLabel: true},
-    'CRISPRn_depletion-peaks.bed': {"label":"", color:"#7570b3", mode: 'dense', marginTop: 2},
+    'CRISPRn_neglog-pDeplete.wig':{"label":"CRISPRn depletion ", color:PURPLE, yLabel:"-log_{10} p", height: 52, autoscaleGroup:"spr", marginTop:10, centerLabel: true},
+    'CRISPRn_depletion-peaks.bed': {"label":"", color:PURPLE, mode: 'dense', marginTop: 2},
     
-    'CRISPRn_neglog-pEnrich.wig':{"label":"CRISPRn enrichment ", color:"#4b3f87", yLabel:"-log_{10} p", height: 52, autoscaleGroup:"spr", marginTop:10, centerLabel: true},
-    'CRISPRn_enrichment-peaks.bed': {"label":"", color:"#4b3f87", mode: 'dense', marginTop: 2},
+    'CRISPRn_neglog-pEnrich.wig':{"label":"CRISPRn enrichment ", color:INDIGO, yLabel:"-log_{10} p", height: 52, autoscaleGroup:"spr", marginTop:10, centerLabel: true},
+    'CRISPRn_enrichment-peaks.bed': {"label":"", color:INDIGO, mode: 'dense', marginTop: 2},
 
-    'CRISPRi_neglog-pDeplete.wig':{"label":"CRISPRi depletion ", color:"#e82989", yLabel:"-log_{10} p", height: 52, autoscaleGroup:"spr", marginTop:10, centerLabel: true},
-    'CRISPRi_depletion-peaks.bed': {"label":"", color:"#e82989", mode: 'dense', marginTop: 2},
+    'CRISPRi_neglog-pDeplete.wig':{"label":"CRISPRi depletion ", color:PINK, yLabel:"-log_{10} p", height: 52, autoscaleGroup:"spr", marginTop:10, centerLabel: true},
+    'CRISPRi_depletion-peaks.bed': {"label":"", color:PINK, mode: 'dense', marginTop: 2},
     
-    'CRISPRi_neglog-pEnrich.wig':{"label":"CRISPRi enrichment ", color:"#e82989", yLabel:"-log_{10} p", height: 52, autoscaleGroup:"spr", marginTop:10, centerLabel: true},
-    // 'CRISPRi_enrichment-peaks.bed': {"label":"", color:"#e82989", mode: 'dense', marginTop: 2}, // no enrichment peaks for CRISPRi
+    'CRISPRi_neglog-pEnrich.wig':{"label":"CRISPRi enrichment ", color:PINK, yLabel:"-log_{10} p", height: 52, autoscaleGroup:"spr", marginTop:10, centerLabel: true},
+    // 'CRISPRi_enrichment-peaks.bed': {"label":"", color:PINK, mode: 'dense', marginTop: 2}, // no enrichment peaks for CRISPRi
 
-    'CRISPRa_neglog-pDeplete.wig':{"label":"CRISPRa depletion ", color:"#1b9d79", yLabel:"-log_{10} p", height: 52, autoscaleGroup:"spr", marginTop:10, centerLabel: true},
-    'CRISPRa_depletion-peaks.bed': {"label":"", color:"#1b9d79", mode: 'dense', marginTop: 2},
+    'CRISPRa_neglog-pDeplete.wig':{"label":"CRISPRa depletion ", color:GREEN, yLabel:"-log_{10} p", height: 52, autoscaleGroup:"spr", marginTop:10, centerLabel: true},
+    'CRISPRa_depletion-peaks.bed': {"label":"", color:GREEN, mode: 'dense', marginTop: 2},
     
-    'CRISPRa_neglog-pEnrich.wig':{"label":"CRISPRa enrichment ", color:"#1b9d79", yLabel:"-log_{10} p", height: 52, autoscaleGroup:"spr", marginTop:10, centerLabel: true},
-    'CRISPRa_enrichment-peaks.bed': {"label":"", color:"#1b9d79", mode: 'dense', marginTop: 2},
+    'CRISPRa_neglog-pEnrich.wig':{"label":"CRISPRa enrichment ", color:GREEN, yLabel:"-log_{10} p", height: 52, autoscaleGroup:"spr", marginTop:10, centerLabel: true},
+    'CRISPRa_enrichment-peaks.bed': {"label":"", color:GREEN, mode: 'dense', marginTop: 2},
 
-    'MPRA_normalized-activity.wig':{"label":"MPRA activity (relative)", color:"#da6406", altColor: "#fdc07f", yLabel:"log_{2}FC", height: 72, autoscaleGroup:"mpra", marginTop:10, centerLabel: true},
-    'MPRA_activator-peaks.bed': {"label":"Enhancers", color:"#da6406", mode: 'dense', marginTop: 2},
-    'MPRA_repressor-peaks.bed': {"label":"Repressors", color:"#fdc07f", mode: 'dense', marginTop: 2},
+    'MPRA_normalized-activity.wig':{"label":"MPRA activity (relative)", color:DARKORANGE, altColor: LIGHTORANGE, yLabel:"log_{2}FC", height: 72, autoscaleGroup:"mpra", marginTop:10, centerLabel: true},
+    'MPRA_activator-peaks.bed': {"label":"Enhancers", color:DARKORANGE, mode: 'dense', marginTop: 2},
+    'MPRA_repressor-peaks.bed': {"label":"Repressors", color:LIGHTORANGE, mode: 'dense', marginTop: 2},
     
     // // Gene models on top, no label (like a figure).
     // 'demo_genes.bed': { label: '', color: '#1d2127', mode: 'full', featureLabels: false, marginTop: 2 },

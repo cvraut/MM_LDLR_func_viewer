@@ -45,8 +45,8 @@ tracks.config.ts (optional)                     ─┘
 Windows:
 
 ```powershell
-nvm install 11.19.1
-nvm use 11
+nvm install 24
+nvm use 24
 ```
 
 Requirements: [Node.js](https://nodejs.org) 18 or newer.
@@ -82,11 +82,15 @@ Open `dist/index.html` in any modern browser. The project ships with **synthetic
 
    UCSC `track` header lines are honored (`name`, `description`, `color`, `altColor`, `visibility`, `itemRgb`, `viewLimits`, `windowingFunction`, `graphType`, `maxHeightPixels`), so UCSC custom-track files work unchanged.
 
+   `tracks.config.ts` also supports `tracksDir` so tracks can be in a seperate directory on the system.
+
 3. **If your genome is not hg38,** replace `genome/chrom.sizes` (see [Genome files](#4-genome-files)).
 4. **Run `npm run build`.** Every file in `tracks/` becomes a track automatically, named after its `track name=` line or its file name.
 5. **Optional:** style and order tracks in `tracks.config.ts`, and describe them in `help/`.
 
 Binary **bigWig / bigBed** files are not read directly. Convert them with the UCSC tools:
+
+
 
 ```bash
 bigWigToBedGraph input.bw output.bedGraph
