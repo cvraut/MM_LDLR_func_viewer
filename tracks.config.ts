@@ -61,6 +61,14 @@ export default defineConfig({
     'MPRA_activator-peaks.bed': {"label":"Enhancers", color:DARKORANGE, mode: 'dense', marginTop: 2},
     'MPRA_repressor-peaks.bed': {"label":"Repressors", color:LIGHTORANGE, mode: 'dense', marginTop: 2},
     
+    // PhastCons
+    'phastcons30.bedGraph': { label: 'PhastCons30', yLabel: 'P(Cons.)', color: GRAY, mode: 'dense', marginTop: 10, centerLine: true, itemRgb: false, },
+    'phastcons100.bedGraph': { label: 'PhastCons100', yLabel: 'P(Cons.)', color: GRAY, mode: 'dense', marginTop: 10, centerLine: true, itemRgb: false, },
+
+    // ENCODE cCREs
+    'encode3_ccre.bed': { label: 'ENCODE3 cCREs', color: GRAY, mode: 'dense', marginTop: 10, centerLine: true, itemRgb: false, },
+    'encode4_ccre.bed': { label: 'ENCODE4 cCREs', color: GRAY, mode: 'dense', marginTop: 10, centerLine: true, itemRgb: false, },
+
     // // Gene models on top, no label (like a figure).
     // 'demo_genes.bed': { label: '', color: '#1d2127', mode: 'full', featureLabels: false, marginTop: 2 },
 
