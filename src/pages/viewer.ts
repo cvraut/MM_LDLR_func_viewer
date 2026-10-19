@@ -169,6 +169,11 @@ export function createViewer(store: Store, defaultPosition: string): Viewer {
     requestAnimationFrame(render);
   }
 
+  function effectiveLabel(s: TrackStyle, visibleIds: Set<string>): string {
+    if (!s.missingParentName || !s.after.length || s.after.some((p) => visibleIds.has(p))) return s.label;
+    return s.missingParentName;
+  }
+
   // --------------------------------------------------------------- toolbar
 
   const sliderToSpan = (v: number) => {
@@ -310,13 +315,15 @@ export function createViewer(store: Store, defaultPosition: string): Viewer {
 
   /** Make the DOM rows match the visible tracks, in order. */
   function syncRows(visible: Track[]) {
+    const visibleIds = new Set(visible.map((t) => t.id));
     const keep = new Set(visible.map((t) => t.id));
     for (const [id, r] of rows) if (!keep.has(id)) { r.el.remove(); rows.delete(id); hits.delete(id); }
     visible.forEach((t, i) => {
       let r = rows.get(t.id);
       if (!r) rows.set(t.id, (r = makeRow(t)));
       const s = store.styleOf(t);
-      if (r.fullLabel !== s.label) { r.fullLabel = s.label; r.labelLines = 0; }
+      const label = effectiveLabel(s, visibleIds);
+      if (r.fullLabel !== label) { r.fullLabel = label; r.labelLines = 0; }
       r.label.style.color = resolveColor(s.color);
       r.label.classList.toggle('centered', s.centerLabel);
       r.el.style.marginTop = `${i === 0 ? 0 : s.marginTop}px`;
@@ -432,7 +439,7 @@ export function createViewer(store: Store, defaultPosition: string): Viewer {
     showAllBtn.hidden = hidden.length < 2;
   }
   showAllBtn.addEventListener('click', () => {
-    for (const t of store.hiddenTracks()) store.show(t.id);
+    store.showAll();
   });
 
   // --------------------------------------------------- pointer interactions

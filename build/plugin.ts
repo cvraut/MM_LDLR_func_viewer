@@ -59,6 +59,7 @@ const DEFAULT_STYLE: Omit<TrackStyle, 'label' | 'color' | 'altColor'> = {
   height: 50, marginTop: 6, yLabel: '', viewLimits: null, autoscaleGroup: null,
   windowing: 'max', graphType: 'bar', mode: 'pack', hidden: false, itemRgb: false,
   centerLine: false, featureLabels: true, description: '', centerLabel: false,
+  after: [], missingParentName: "",
 };
 
 async function loadUserConfig(root: string): Promise<{ config: BrowserConfig; file: string | null }> {
@@ -189,6 +190,23 @@ export async function buildBundle(root: string): Promise<BuildResult> {
     }
   });
 
+  // ---- resolve `after`: file names or ids → ids; reject unknown names and loops
+  const idByKey = new Map<string, string>();
+  for (const t of tracks) { idByKey.set(t.file, t.id); idByKey.set(t.id, t.id); }
+  if (sequence) idByKey.set('sequence', 'sequence');
+  for (const t of tracks) {
+    const raw = t.style.after as unknown as string | string[] | undefined;
+    const names = raw === undefined ? [] : Array.isArray(raw) ? raw : [raw];
+    t.style.after = names.map((n) => {
+      const id = idByKey.get(n);
+      if (!id) throw new Error(`tracks["${t.file}"].after refers to "${n}", which is not a track.${suggest(n, tracks.map((x) => x.file))}`);
+      if (id === t.id) throw new Error(`tracks["${t.file}"].after names the track itself.`);
+      return id;
+    });
+  }
+  const loop = findAfterCycle(tracks);
+  if (loop) throw new Error(`"after" settings form a loop: ${loop.join(' → ')}`);
+
   // ---- default position --------------------------------------------------
   let defaultPosition: string;
   if (config.defaultPosition) {
@@ -252,6 +270,31 @@ function autoPosition(tracks: TrackBundle[], seq: SequenceBundle | null, chroms:
   const pad = Math.round((best[1].e - best[1].s) * 0.02);
   const size = chroms.find((x) => x.name === best![0])!.size;
   return formatPosition(best[0], Math.max(0, best[1].s - pad), Math.min(size, best[1].e + pad));
+}
+
+/** Ids along a loop in the `after` graph, or null if there is none. */
+function findAfterCycle(tracks: TrackBundle[]): string[] | null {
+  const parents = new Map(tracks.map((t) => [t.id, t.style.after]));
+  const state = new Map<string, 'visiting' | 'done'>();
+  const stack: string[] = [];
+  const visit = (id: string): string[] | null => {
+    if (state.get(id) === 'done') return null;
+    if (state.get(id) === 'visiting') return [...stack.slice(stack.indexOf(id)), id];
+    state.set(id, 'visiting');
+    stack.push(id);
+    for (const p of parents.get(id) ?? []) {
+      const found = visit(p);
+      if (found) return found;
+    }
+    stack.pop();
+    state.set(id, 'done');
+    return null;
+  };
+  for (const t of tracks) {
+    const found = visit(t.id);
+    if (found) return found;
+  }
+  return null;
 }
 
 /** The Vite plugin. */

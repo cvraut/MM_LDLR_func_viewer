@@ -48,6 +48,10 @@ export interface TrackStyle {
   description: string;
   /** Center the track name vertically (default: top-aligned). */
   centerLabel: boolean;
+  /** Ids of the tracks this one is placed under when re-added (resolved at build time). */
+  after: string[];
+  /** While all parents are hidden, show the first parent's name as the label. */
+  missingParentName: string;
 }
 
 /** One zoom level of the signal pyramid. Only bins that contain data are stored. */

@@ -41,7 +41,14 @@ export interface TrackOptions {
   /** Show feature names in pack/full mode (default true). */
   featureLabels?: boolean;
   /** Center the track name vertically on the track instead of aligning it to the top. */
-    centerLabel?: boolean;
+  centerLabel?: boolean;
+  /**
+   * Track(s) this one belongs under (file names or ids). When re-added from the hidden
+   * tray it goes below the lowest visible of them; dragging ignores this.
+   */
+  after?: string | string[];
+  /** Label to use while every track in `after` is hidden. */
+  missingParentName?: string;
 }
 
 export interface BrowserConfig {
@@ -83,6 +90,7 @@ export const DEFAULT_PALETTE = [
 const TRACK_KEYS: (keyof TrackOptions)[] = [
   'label', 'color', 'altColor', 'height', 'marginTop', 'yLabel', 'viewLimits', 'autoscaleGroup',
   'windowing', 'graphType', 'mode', 'hidden', 'itemRgb', 'centerLine', 'featureLabels', 'centerLabel',
+  'after', 'missingParentName',
 ];
 const TOP_KEYS: (keyof BrowserConfig)[] = [
   'title', 'subtitle', 'defaultPosition', 'genome', 'sequenceTrack', 'maxDataMB', 'tracks', 'tracksDir',
@@ -139,6 +147,9 @@ export function validateConfig(config: BrowserConfig): void {
       }
       if (key === 'viewLimits' && !(Array.isArray(value) && value.length === 2 && value[0] < value[1])) {
         errors.push(`${where} must be [min, max] with min < max.`);
+      }
+      if (key === 'after' && !(typeof value === 'string' || (Array.isArray(value) && value.every((v) => typeof v === 'string')))) {
+        errors.push(`${where} must be a track name or a list of track names.`);
       }
     }
   }

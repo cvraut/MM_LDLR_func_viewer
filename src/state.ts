@@ -135,12 +135,81 @@ export class Store {
     this.updateLayout((l) => { if (!l.hidden.includes(id)) l.hidden.push(id); });
   }
 
-  /** Show a hidden track. index = position among visible tracks; omitted = bottom. */
+    /** Show a hidden track. index = position among visible tracks; omitted = under its `after` parents (or bottom). */
   show(id: string, index?: number): void {
     this.updateLayout((l) => {
       l.hidden = l.hidden.filter((h) => h !== id);
-      this.placeVisible(l, id, index);
+      this.placeVisible(l, id, index ?? this.afterIndex(l, id));
     });
+  }
+
+  /**
+   * Show every hidden track: tracks without `after` first (config order), then
+   * repeatedly the next track whose parents are all already visible.
+   */
+  showAll(): void {
+    const pending = this.hiddenTracks().map((t) => t.id);
+    const sequence: string[] = [];
+    while (pending.length) {
+      let i = pending.findIndex((id) => this.parentsOf(id).length === 0);
+      if (i < 0) i = pending.findIndex((id) => this.parentsOf(id).every((p) => !pending.includes(p)));
+      if (i < 0) i = 0; // unreachable: loops are rejected at build time
+      sequence.push(...pending.splice(i, 1));
+    }
+    this.updateLayout((l) => {
+      for (const id of sequence) {
+        l.hidden = l.hidden.filter((h) => h !== id);
+        this.placeVisible(l, id, this.afterIndex(l, id));
+      }
+    });
+  }
+
+  parentsOf(id: string): string[] {
+    return this.tracks.find((t) => t.id === id)?.style.after ?? [];
+  }
+
+  /** True if `id` comes after `ancestor`, directly or through a chain. */
+  private descendsFrom(id: string, ancestor: string, seen = new Set<string>()): boolean {
+    for (const p of this.parentsOf(id)) {
+      if (p === ancestor) return true;
+      if (!seen.has(p)) {
+        seen.add(p);
+        if (this.descendsFrom(p, ancestor, seen)) return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Index among visible tracks for re-adding `id`: just below the lowest visible parent
+   * (hidden parents are looked through to their parents), past that parent's existing
+   * followers. undefined = bottom.
+   */
+  private afterIndex(l: Layout, id: string): number | undefined {
+    const visible = l.order.filter((x) => x !== id && !l.hidden.includes(x));
+    const pos = new Map(visible.map((x, i) => [x, i]));
+    let lowest = -1;
+    const seen = new Set<string>();
+    const walk = (t: string) => {
+      for (const p of this.parentsOf(t)) {
+        if (seen.has(p)) continue;
+        seen.add(p);
+        if (pos.has(p)) lowest = Math.max(lowest, pos.get(p)!);
+        else walk(p);
+      }
+    };
+    walk(id);
+    if (lowest < 0) {
+      // No visible parent. A track without `after` goes right above its first visible follower.
+      if (this.parentsOf(id).length === 0) {
+        const follower = visible.findIndex((x) => this.descendsFrom(x, id));
+        if (follower >= 0) return follower;
+      }
+      return undefined;   // bottom
+    }
+    let i = lowest + 1;
+    while (i < visible.length && this.descendsFrom(visible[i], visible[lowest])) i++;
+    return i;
   }
 
   /** Move a visible track to `index` among visible tracks. */

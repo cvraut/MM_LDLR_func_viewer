@@ -165,6 +165,8 @@ export default defineConfig({
 | `itemRgb` | BED | auto | Color features from BED column 9. On automatically when that column has colors. |
 | `centerLine` | BED | `false` | Thin gray line through the middle of each row (nice for dense rows). |
 | `featureLabels` | BED | `true` | Draw feature names in pack/full mode. |
+| `after` | all | `""` | single string or list of strings representing the filenames of the tracks that this track should proceed when added back to the viewer. If the track mentioned in after is added back to the viewer it will default to be added above all the tracks in after |
+| `missingParentName` | all | `""` | The track label to change to if the tracks in `after` are hidden. Will not invoke if no tracks are specified in `after`. |
 
 Precedence: built-in defaults < the file's `track` line < `tracks.config.ts`. Viewers can still change mode, windowing and scaling from the right-click menu; that choice is remembered in their browser only.
 
