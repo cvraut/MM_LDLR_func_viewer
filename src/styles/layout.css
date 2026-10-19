@@ -111,7 +111,7 @@ canvas { display: block; }
 
 .track-tools {
   position: absolute; top: -2px; left: 0;
-  display: flex; align-items: center; gap: 2px;
+  display: flex; align-items: center; gap: 0px;
   opacity: 0; transition: opacity 0.12s;
 }
 .track-row:hover .track-tools, .track-row:focus-within .track-tools { opacity: 1; }
@@ -119,10 +119,13 @@ canvas { display: block; }
   display: grid; place-items: center; width: 20px; height: 18px; padding: 0;
   border: 0; border-radius: 3px; background: none; color: var(--muted); cursor: pointer;
 }
-.grip { cursor: grab; }
+.grip { cursor: grab; width: 14px; }
 .hide-btn { font-size: 16px; line-height: 1; }
 .grip:hover, .hide-btn:hover { background: var(--surface); color: var(--ink); }
+.hide-btn:hover { background: var(--danger-soft); color: var(--danger); }
 .track-row:hover .gutter { background: linear-gradient(to right, var(--surface), transparent 70%); }
+
+.track-row .gutter { cursor: grab; }
 
 .empty-note { margin: 24px 0; padding-left: var(--gutter-width); color: var(--muted); }
 

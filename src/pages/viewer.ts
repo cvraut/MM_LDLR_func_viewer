@@ -257,9 +257,12 @@ export function createViewer(store: Store, defaultPosition: string): Viewer {
         onDrop: (i) => store.move(t.id, i),
       });
     };
-    label.addEventListener('pointerdown', beginReorder);
+    // Press anywhere in the gutter left of the y-axis to drag (except the × button).
+    row.querySelector<HTMLElement>('.gutter')!.addEventListener('pointerdown', (e) => {
+      if ((e.target as HTMLElement).closest('.hide-btn')) return;
+      beginReorder(e);
+    });
     label.addEventListener('dragstart', (e) => e.preventDefault());
-    row.querySelector<HTMLElement>('.grip')!.addEventListener('pointerdown', beginReorder);
     row.querySelector('.hide-btn')!.addEventListener('click', () => store.hide(t.id));
     row.querySelector('.gutter')!.addEventListener('contextmenu', (e) => {
       e.preventDefault();

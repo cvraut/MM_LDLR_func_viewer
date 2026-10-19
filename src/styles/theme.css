@@ -16,6 +16,8 @@
   --hairline-strong: #c9ccd1; /* axis baseline, dense-row center lines */
   --surface: #f6f7f8;       /* hover backgrounds, chips */
   --accent: #2c6db5;        /* focus, selection, drop line, current tab */
+  --danger: #c8372d;                      /* destructive actions, e.g. hide × */
+  --danger-soft: rgba(200, 55, 45, 0.12);
   --accent-soft: rgba(44, 109, 181, 0.12);
 
   /* Type */

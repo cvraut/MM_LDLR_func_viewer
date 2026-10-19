@@ -28,7 +28,7 @@ At the highest zoom the sequence track shows individual bases.
 
 ## Arranging tracks
 
-- **Reorder:** drag a track name (or the dotted grip that appears on hover) up or down.
+- **Reorder:** drag anywhere in the track's left area, up or down.
 - **Hide:** hover a track name and click ×. Hidden tracks wait in the *Hidden tracks* tray under the viewer.
 - **Bring back:** click a track in the tray to add it at the bottom, or drag it to the exact place you want.
 - **Display options:** right-click a track name to change how it is drawn.
