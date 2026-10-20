@@ -42,27 +42,27 @@ export default defineConfig({
 
 
     'CRISPRn_neglog-pDeplete.wig':{ label:"CRISPRn depletion ", color:PURPLE, yLabel:"-log_{10} p", height: 52, autoscaleGroup:"spr", marginTop:10, centerLabel: true},
-    'CRISPRn_depletion-peaks.bed': { label:"", color:PURPLE, mode: 'dense', marginTop: 2, after: "CRISPRn_neglog-pDeplete.wig", missingParentName: "CRISPRn depletion hits" },
+    'CRISPRn_depletion-peaks.bed': { label:"", color:PURPLE, mode: 'dense', marginTop: 2, after: "CRISPRn_neglog-pDeplete.wig", missingParentName: "CRISPRn depletion hits", centerLine: true },
     
     'CRISPRn_neglog-pEnrich.wig':{ label:"CRISPRn enrichment ", color:INDIGO, yLabel:"-log_{10} p", height: 52, autoscaleGroup:"spr", marginTop:10, centerLabel: true},
-    'CRISPRn_enrichment-peaks.bed': { label:"", color:INDIGO, mode: 'dense', marginTop: 2, after: "CRISPRn_neglog-pEnrich.wig", missingParentName: "CRISPRn enrichment hits" },
+    'CRISPRn_enrichment-peaks.bed': { label:"", color:INDIGO, mode: 'dense', marginTop: 2, after: "CRISPRn_neglog-pEnrich.wig", missingParentName: "CRISPRn enrichment hits", centerLine: true },
 
 
     'CRISPRi_neglog-pDeplete.wig':{ label:"CRISPRi depletion ", color:PINK, yLabel:"-log_{10} p", height: 52, autoscaleGroup:"spr", marginTop:10, centerLabel: true},
-    'CRISPRi_depletion-peaks.bed': { label:"", color:PINK, mode: 'dense', marginTop: 2, after: "CRISPRi_neglog-pDeplete.wig", missingParentName: "CRISPRi depletion hits" },
+    'CRISPRi_depletion-peaks.bed': { label:"", color:PINK, mode: 'dense', marginTop: 2, after: "CRISPRi_neglog-pDeplete.wig", missingParentName: "CRISPRi depletion hits", centerLine: true },
     
     'CRISPRi_neglog-pEnrich.wig':{ label:"CRISPRi enrichment ", color:PINK, yLabel:"-log_{10} p", height: 52, autoscaleGroup:"spr", marginTop:10, centerLabel: true},
     // 'CRISPRi_enrichment-peaks.bed': {"label":"", color:PINK, mode: 'dense', marginTop: 2}, // no enrichment peaks for CRISPRi
 
     'CRISPRa_neglog-pDeplete.wig':{ label:"CRISPRa depletion ", color:GREEN, yLabel:"-log_{10} p", height: 52, autoscaleGroup:"spr", marginTop:10, centerLabel: true},
-    'CRISPRa_depletion-peaks.bed': { label:"", color:GREEN, mode: 'dense', marginTop: 2, after: "CRISPRa_neglog-pDeplete.wig", missingParentName: "CRISPRa depletion hits" },
+    'CRISPRa_depletion-peaks.bed': { label:"", color:GREEN, mode: 'dense', marginTop: 2, after: "CRISPRa_neglog-pDeplete.wig", missingParentName: "CRISPRa depletion hits", centerLine: true },
     
     'CRISPRa_neglog-pEnrich.wig':{ label:"CRISPRa enrichment ", color:GREEN, yLabel:"-log_{10} p", height: 52, autoscaleGroup:"spr", marginTop:10, centerLabel: true},
-    'CRISPRa_enrichment-peaks.bed': { label:"", color:GREEN, mode: 'dense', marginTop: 2, after: "CRISPRa_neglog-pEnrich.wig", missingParentName: "CRISPRa enrichment hits" },
+    'CRISPRa_enrichment-peaks.bed': { label:"", color:GREEN, mode: 'dense', marginTop: 2, after: "CRISPRa_neglog-pEnrich.wig", missingParentName: "CRISPRa enrichment hits", centerLine: true },
 
     'MPRA_normalized-activity.wig':{ label:"MPRA activity (relative)", color:DARKORANGE, altColor: LIGHTORANGE, yLabel:"log_{2}FC", height: 72, autoscaleGroup:"mpra", marginTop:10, centerLabel: true},
-    'MPRA_activator-peaks.bed': { label:"Enhancers", color:DARKORANGE, mode: 'dense', marginTop: 2, after: "MPRA_normalized-activity.wig", missingParentName: "MPRA enhancer hits" },
-    'MPRA_repressor-peaks.bed': { label:"Repressors", color:LIGHTORANGE, mode: 'dense', marginTop: 2, after:[ "MPRA_normalized-activity.wig", "MPRA_activator-peaks.bed"], missingParentName: "MPRA repressor hits" },
+    'MPRA_activator-peaks.bed': { label:"Enhancers", color:DARKORANGE, mode: 'dense', marginTop: 2, after: "MPRA_normalized-activity.wig", missingParentName: "MPRA enhancer hits", centerLine: true },
+    'MPRA_repressor-peaks.bed': { label:"Repressors", color:LIGHTORANGE, mode: 'dense', marginTop: 2, after:[ "MPRA_normalized-activity.wig", "MPRA_activator-peaks.bed"], missingParentName: "MPRA repressor hits", centerLine: true },
     
     // ATAC
     'ATAC_liver_v2_mean_log2FC.bedGraph': { label: 'ATAC', yLabel: 'log_{2}FC', color: GRAY, height: 46, marginTop: 8, autoscaleGroup:"atac", viewLimits:[0,4] },
@@ -89,6 +89,12 @@ export default defineConfig({
     // ENCODE cCREs
     'encode3_ccre.bed': { label: 'ENCODE3 cCREs', color: GRAY, mode: 'dense', marginTop: 10, centerLine: true, itemRgb: false, },
     'encode4_ccre.bed': { label: 'ENCODE4 cCREs', color: GRAY, mode: 'dense', marginTop: 10, centerLine: true, itemRgb: false, },
+
+    // Custom tracks for GWAS (upload test)
+    // 'aou_effects.bedGraph': { label: 'AoU LDL effects', yLabel: 'Effect', height: 52, marginTop: 10, autoscaleGroup:"gwas", centerLabel: true },
+    // 'aou_effects_peaks.bed': { label: '', mode: 'dense', marginTop: 2, centerLine: true, itemRgb: false, after: "aou_effects.bedGraph", missingParentName: "AoU LDL effects (p < 0.001)" },
+    // 'aou_LDL_inc_effects_peaks.bed': { label: '↑ LDL mut. (AoU)', mode: 'dense', marginTop: 10, centerLine: true, itemRgb: false, },
+    // 'aou_LDL_dec_effects_peaks.bed': { label: '↓ LDL mut. (AoU)', mode: 'dense', marginTop: 10, centerLine: true, itemRgb: false, after: "aou_LDL_inc_effects_peaks.bed", },
 
     // // Gene models on top, no label (like a figure).
     // 'demo_genes.bed': { label: '', color: '#1d2127', mode: 'full', featureLabels: false, marginTop: 2 },

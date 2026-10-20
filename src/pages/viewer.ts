@@ -141,26 +141,47 @@ export function createViewer(store: Store, defaultPosition: string): Viewer {
 
   /** Keep in sync with .track-label line-height in layout.css. */
   const LABEL_LINE_HEIGHT = 14;
-  /** Let a track name use as many lines as the track is tall; "…" after that. */
+  /** Room kept free for the grip and × at the left of the gutter (px). */
+  const TOOLS_RESERVE = 38;
+    /** Put `text` into `el`, trimming it with "…" until it fits el's max width and height. */
+  function fitText(el: HTMLElement, text: string) {
+    const fits = () => el.scrollHeight <= el.clientHeight + 1 && el.scrollWidth <= el.clientWidth + 1;
+    el.textContent = text;
+    if (fits()) return;
+    let lo = 0;
+    let hi = text.length;
+    while (lo < hi) {
+      const mid = (lo + hi + 1) >> 1;
+      el.textContent = text.slice(0, mid).trimEnd() + '…';
+      if (fits()) lo = mid;
+      else hi = mid - 1;
+    }
+    el.textContent = text.slice(0, lo).trimEnd() + '…';
+  }
+
+  /**
+   * Fit a track name into as many lines as the track is tall. Desktop: use the full gutter
+   * width when the label ends up entirely below the grip and ×; otherwise leave room for them.
+   */
   function setLabelLines(r: Row, trackHeight: number) {
     const lines = Math.max(1, Math.floor(trackHeight / LABEL_LINE_HEIGHT));
     if (lines === r.labelLines) return;                   // already fitted for this height
     r.labelLines = lines;
     const el = r.label;
-        const fits = () => el.scrollHeight <= el.clientHeight + 1 && el.scrollWidth <= el.clientWidth + 1;
+    const gutter = el.parentElement!;
+    const tools = gutter.querySelector<HTMLElement>('.track-tools')!;
+    const usable = gutter.clientWidth - (parseFloat(getComputedStyle(el).right) || 0);
     el.style.maxHeight = `${lines * LABEL_LINE_HEIGHT}px`;
-    el.textContent = r.fullLabel;
-    if (fits()) return;
-    // Binary search for the longest prefix that fits with "…"
-    let lo = 0;
-    let hi = r.fullLabel.length;
-    while (lo < hi) {
-      const mid = (lo + hi + 1) >> 1;
-      el.textContent = r.fullLabel.slice(0, mid).trimEnd() + '…';
-      if (fits()) lo = mid;
-      else hi = mid - 1;
+
+    // Touch screens: the × sits mid-row, so always leave room for it.
+    if (!window.matchMedia('(pointer: coarse)').matches) {
+      el.style.maxWidth = `${usable - 4}px`;
+      fitText(el, r.fullLabel);
+      const labelTop = el.getBoundingClientRect().top - gutter.getBoundingClientRect().top;
+      if (labelTop >= tools.offsetTop + tools.offsetHeight) return;   // clear of the tools: keep wide
     }
-    el.textContent = r.fullLabel.slice(0, lo).trimEnd() + '…';
+    el.style.maxWidth = `${usable - TOOLS_RESERVE}px`;
+    fitText(el, r.fullLabel);
   }
 
   function scheduleRender() {
