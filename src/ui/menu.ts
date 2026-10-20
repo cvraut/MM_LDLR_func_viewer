@@ -11,13 +11,17 @@ export type MenuItem =
   | { separator: true };
 
 let current: HTMLElement | null = null;
+let onCloseCurrent: (() => void) | null = null;
 
 export function closeMenu(): void {
   current?.remove();
   current = null;
+  const cb = onCloseCurrent;
+  onCloseCurrent = null;
+  cb?.();
 }
 
-export function openMenu(x: number, y: number, items: MenuItem[]): void {
+export function openMenu(x: number, y: number, items: MenuItem[], onClose?: () => void): void {
   closeMenu();
   const el = document.createElement('div');
   el.className = 'menu';
@@ -42,6 +46,7 @@ export function openMenu(x: number, y: number, items: MenuItem[]): void {
   el.style.left = `${Math.min(x, window.innerWidth - r.width - 8)}px`;
   el.style.top = `${Math.min(y, window.innerHeight - r.height - 8)}px`;
   current = el;
+  onCloseCurrent = onClose ?? null;
   (el.querySelector('.menu-item') as HTMLElement | null)?.focus();
 
   el.addEventListener('keydown', (e) => {

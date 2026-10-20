@@ -31,6 +31,7 @@ export default defineConfig({
   title: 'LDLR Locus Browser',
   subtitle: 'Multimodal functional characterization of the <i>LDLR</i> locus',
   defaultPosition: 'chr19:11,039,463-11,163,820',
+  sequenceTrack: {label: 'Sequence hg38' },
   genome: {
     chromSizes: 'genome/chrom.sizes',
     fasta: 'genome/hg38_ldlr_region.fa',

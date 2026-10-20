@@ -11,17 +11,17 @@ let popup: HTMLElement | null = null;
 export const esc = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-function place(el: HTMLElement, x: number, y: number, offset = 14) {
+function place(el: HTMLElement, x: number, y: number, offset = 14, above = false) {
   const r = el.getBoundingClientRect();
   let left = x + offset;
-  let top = y + offset;
+  let top = above ? y - r.height - offset * 3 : y + offset;
   if (left + r.width > window.innerWidth - 8) left = x - r.width - offset;
-  if (top + r.height > window.innerHeight - 8) top = y - r.height - offset;
+  if (!above && top + r.height > window.innerHeight - 8) top = y - r.height - offset;
   el.style.left = `${Math.max(8, left)}px`;
   el.style.top = `${Math.max(8, top)}px`;
 }
 
-export function showTooltip(x: number, y: number, html: string): void {
+export function showTooltip(x: number, y: number, html: string, above = false): void {
   if (!tip) {
     tip = document.createElement('div');
     tip.className = 'tooltip';
@@ -30,7 +30,7 @@ export function showTooltip(x: number, y: number, html: string): void {
   }
   if (tip.innerHTML !== html) tip.innerHTML = html;
   tip.hidden = false;
-  place(tip, x, y);
+  place(tip, x, y, 14, above);
 }
 
 export function hideTooltip(): void {

@@ -44,7 +44,7 @@ const CLICK_DELAY = 250;
 
 interface Row {
   el: HTMLElement;
-  label: HTMLAnchorElement;
+  label: HTMLButtonElement;
   yaxis: HTMLCanvasElement;
   canvas: HTMLCanvasElement;
   /** Untruncated label text, and how many lines it was last fitted to (0 = refit). */
@@ -147,7 +147,7 @@ export function createViewer(store: Store, defaultPosition: string): Viewer {
     if (lines === r.labelLines) return;                   // already fitted for this height
     r.labelLines = lines;
     const el = r.label;
-    const fits = () => el.scrollHeight <= el.clientHeight + 1;
+        const fits = () => el.scrollHeight <= el.clientHeight + 1 && el.scrollWidth <= el.clientWidth + 1;
     el.style.maxHeight = `${lines * LABEL_LINE_HEIGHT}px`;
     el.textContent = r.fullLabel;
     if (fits()) return;
@@ -233,6 +233,16 @@ export function createViewer(store: Store, defaultPosition: string): Viewer {
 
   function makeRow(t: Track): Row {
     const row = document.createElement('div');
+    const openTrackMenu = (x: number, y: number) => {
+      row.classList.add('menu-open');
+      openMenu(x, y, menuFor(t), () => {
+        // Keep the tools in place until the tap that closed the menu has finished,
+        // so a tap on × still lands on it.
+        const done = () => row.classList.remove('menu-open');
+        window.addEventListener('click', done, { once: true });
+        setTimeout(done, 700);   // fallback when no click follows (Escape, resize)
+      });
+    };
     row.className = 'track-row';
     row.dataset.id = t.id;
     row.innerHTML = `
@@ -243,36 +253,60 @@ export function createViewer(store: Store, defaultPosition: string): Viewer {
           </button>
           <button type="button" class="hide-btn" aria-label="Hide track" title="Hide track">×</button>
         </div>
-        <a class="track-label" draggable="false"></a>
+        <button type="button" class="track-label"></button>
         <canvas class="yaxis"></canvas>
       </div>
       <div class="data"><canvas class="data-canvas"></canvas></div>`;
-    const label = row.querySelector<HTMLAnchorElement>('.track-label')!;
-    label.href = helpHash(`track-${t.id}`);
-    label.title = `${displayName(t)}: drag to reorder, click for details, right-click for options`;
-
+    const label = row.querySelector<HTMLButtonElement>('.track-label')!;
+    label.title = `${displayName(t)}: hold or drag to reorder, click for options`;
+    // Click (or tap) the name for the track menu; "About this track" in it opens the help.
+    label.addEventListener('click', (e) => {
+      const r = label.getBoundingClientRect();
+      const fromKeyboard = e.detail === 0;          // Enter/Space: no pointer position
+      openTrackMenu(fromKeyboard ? r.left : e.clientX, fromKeyboard ? r.bottom : e.clientY);
+    });
     const beginReorder = (e: PointerEvent) => {
       if (e.button !== 0) return;
       e.preventDefault();
       startDrag({
         event: e, label: displayName(t), color: resolveColor(store.styleOf(t).color),
         stack, indicator: dropIndicator, overlay, excludeId: t.id,
+        onArm: () => row.classList.add('drag-armed'),
         onStart: () => row.classList.add('dragging'),
-        onEnd: () => row.classList.remove('dragging'),
+        onEnd: () => row.classList.remove('dragging', 'drag-armed'),
         onDrop: (i) => store.move(t.id, i),
       });
     };
-    // Press anywhere in the gutter left of the y-axis to drag (except the × button).
-    row.querySelector<HTMLElement>('.gutter')!.addEventListener('pointerdown', (e) => {
-      if ((e.target as HTMLElement).closest('.hide-btn')) return;
+        // Touch: tap the left side to reveal the red ×; tapping a × that was already showing hides the track.
+    // Mouse: the × appears on hover and one click hides.
+    const gutter = row.querySelector<HTMLElement>('.gutter')!;
+    const hideBtn = row.querySelector<HTMLButtonElement>('.hide-btn')!;
+    const SHOWING = ['tools-shown', 'menu-open', 'drag-armed', 'dragging'];
+    let pressWasTouch = false;
+    let toolsWereShowing = false;
+    let shownTimer = 0;
+    const showTools = () => {
+      row.classList.add('tools-shown');
+      clearTimeout(shownTimer);
+      shownTimer = window.setTimeout(() => row.classList.remove('tools-shown'), 3000);
+    };
+    gutter.addEventListener('pointerdown', (e) => {
+      pressWasTouch = e.pointerType === 'touch';
+      toolsWereShowing = SHOWING.some((c) => row.classList.contains(c));   // state at the START of the tap
+      if (!pressWasTouch && (e.target as HTMLElement).closest('.hide-btn')) return;
       beginReorder(e);
     });
-    label.addEventListener('dragstart', (e) => e.preventDefault());
-    row.querySelector('.hide-btn')!.addEventListener('click', () => store.hide(t.id));
-    row.querySelector('.gutter')!.addEventListener('contextmenu', (e) => {
+    gutter.addEventListener('click', (e) => {
+      if (!pressWasTouch) return;                     // mouse clicks are handled by the × below
+      pressWasTouch = false;
+      if ((e.target as HTMLElement).closest('.hide-btn') && toolsWereShowing) store.hide(t.id);
+      else showTools();
+    });
+    hideBtn.addEventListener('click', () => { if (!pressWasTouch) store.hide(t.id); });
+    gutter.addEventListener('contextmenu', (e) => {
       e.preventDefault();
       const me = e as MouseEvent;
-      openMenu(me.clientX, me.clientY, menuFor(t));
+      openTrackMenu(me.clientX, me.clientY);
     });
     return {
       el: row,
@@ -524,6 +558,7 @@ export function createViewer(store: Store, defaultPosition: string): Viewer {
   });
 
   browser.addEventListener('pointermove', (e) => {
+    if (e.pointerType === 'touch') return;
     if (sel) {
       const dx = e.clientX - sel.x0;
       if (Math.abs(dx) >= SELECT_MIN_PX) {
@@ -551,6 +586,7 @@ export function createViewer(store: Store, defaultPosition: string): Viewer {
   });
 
   browser.addEventListener('pointerup', (e) => {
+    if (e.pointerType === 'touch') return;
     if (!sel) return;
     const x0 = sel.x0;
     sel = null;
@@ -561,6 +597,10 @@ export function createViewer(store: Store, defaultPosition: string): Viewer {
       store.setView({ chrom: store.view.chrom, start: a, end: b });
       return;
     }
+    clickAt(e);
+  });
+
+  function clickAt(e: PointerEvent) {
     // A plain click: open feature details unless a double-click follows.
     const hit = rowAt(e);
     clearTimeout(clickTimer);
@@ -580,7 +620,7 @@ export function createViewer(store: Store, defaultPosition: string): Viewer {
           { label: 'Copy position', run: () => copy(formatPosition(f.chrom, f.start, f.end)) },
         ]);
     }, CLICK_DELAY);
-  });
+  }
 
   browser.addEventListener('pointercancel', () => { sel = null; selection.hidden = true; });
   browser.addEventListener('pointerleave', () => { if (!sel) { guide.hidden = true; hideTooltip(); } });
@@ -591,6 +631,115 @@ export function createViewer(store: Store, defaultPosition: string): Viewer {
     closePopup();
     store.zoomAt(3, posAtClientX(e.clientX));
   });
+
+    // ---------------------------------------------------------- touch gestures
+  // One finger: sideways drag = pan, hold = hover that follows the finger.
+  // Two fingers: highlight between them, lift = zoom to it. Tap = click.
+  // Normal mode lets the browser scroll vertically; Navigate mode (CSS touch-action: none) doesn't.
+  const HOLD_MS = 450;
+  const MOVE_TOLERANCE = 8;
+  const touches = new Map<number, number>();            // pointerId → clientX
+  let touchMode: 'none' | 'pending' | 'pan' | 'hover' | 'select' | 'done' = 'none';
+  let holdTimer = 0;
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let panLastX = 0;
+
+  const twoXs = () => [...touches.values()].slice(0, 2) as [number, number];
+  const hideHover = () => { guide.hidden = true; hideTooltip(); };
+
+  function hoverAt(e: PointerEvent) {
+    showGuide(e.clientX);
+    const html = hoverInfo(e);
+    if (html) showTooltip(e.clientX, e.clientY, html, true);   // above the finger
+    else hideTooltip();
+  }
+
+  function drawSelection(xA: number, xB: number) {
+    const ob = overlay.getBoundingClientRect();
+    const lo = Math.max(dataLeft(), Math.min(xA, xB));
+    const hi = Math.min(axisData.getBoundingClientRect().right, Math.max(xA, xB));
+    selection.style.left = `${lo - ob.left}px`;
+    selection.style.width = `${Math.max(0, hi - lo)}px`;
+    selectionLabel.textContent = formatSpan(Math.max(0, hi - lo) * bpPerPx());
+    selection.hidden = false;
+  }
+
+  function zoomToSelection(xA: number, xB: number) {
+    selection.hidden = true;
+    const lo = Math.max(dataLeft(), Math.min(xA, xB));
+    const hi = Math.min(axisData.getBoundingClientRect().right, Math.max(xA, xB));
+    if (hi - lo < SELECT_MIN_PX) return;
+    store.setView({ chrom: store.view.chrom, start: posAtClientX(lo), end: posAtClientX(hi) });
+  }
+
+  browser.addEventListener('pointerdown', (e) => {
+    if (e.pointerType !== 'touch') return;
+    // The first finger must start on the tracks; a second finger may land anywhere.
+    if (touches.size === 0 && (!inData(e) || (e.target as HTMLElement).closest('.gutter'))) return;
+    touches.set(e.pointerId, e.clientX);
+    browser.setPointerCapture(e.pointerId);
+    if (touches.size === 1) {
+      touchMode = 'pending';
+      touchStartX = panLastX = e.clientX;
+      touchStartY = e.clientY;
+      clearTimeout(holdTimer);
+      holdTimer = window.setTimeout(() => {
+        if (touchMode === 'pending') { touchMode = 'hover'; hoverAt(e); }
+      }, HOLD_MS);
+    } else if (touches.size === 2) {
+      clearTimeout(holdTimer);
+      hideHover();
+      touchMode = 'select';
+      drawSelection(...twoXs());
+    }
+  });
+
+  browser.addEventListener('pointermove', (e) => {
+    if (e.pointerType !== 'touch' || !touches.has(e.pointerId)) return;
+    touches.set(e.pointerId, e.clientX);
+    if (touchMode === 'pending' && Math.hypot(e.clientX - touchStartX, e.clientY - touchStartY) > MOVE_TOLERANCE) {
+      clearTimeout(holdTimer);
+      touchMode = 'pan';
+    }
+    if (touchMode === 'pan') {
+      store.pan(-(e.clientX - panLastX) * bpPerPx());
+      panLastX = e.clientX;
+    } else if (touchMode === 'hover') {
+      hoverAt(e);
+    } else if (touchMode === 'select' && touches.size >= 2) {
+      drawSelection(...twoXs());
+    }
+  });
+
+  const endTouch = (e: PointerEvent) => {
+    if (e.pointerType !== 'touch' || !touches.has(e.pointerId)) return;
+    clearTimeout(holdTimer);
+    if (touchMode === 'select') {
+      if (e.type === 'pointerup' && touches.size === 2) zoomToSelection(...twoXs());
+      else selection.hidden = true;
+      touchMode = 'done';                       // ignore the other finger until it lifts
+    } else if (touchMode === 'hover') {
+      hideHover();
+      touchMode = 'done';
+    } else if (touchMode === 'pending' && e.type === 'pointerup') {
+      clickAt(e);                               // quick tap
+    }
+    touches.delete(e.pointerId);
+    if (touches.size === 0) touchMode = 'none';
+  };
+  browser.addEventListener('pointerup', endTouch);
+  browser.addEventListener('pointercancel', endTouch);   // the browser took over (page scroll)
+
+  // Stop the phone's own long-press menu on the tracks (track names keep the options menu).
+  browser.addEventListener('contextmenu', (e) => {
+    if (touchMode !== 'none' && !(e.target as HTMLElement).closest('.gutter')) e.preventDefault();
+  });
+
+  // While hovering or selecting, the finger may move in any direction without scrolling the page.
+  browser.addEventListener('touchmove', (e) => {
+    if (touchMode === 'hover' || touchMode === 'select') e.preventDefault();
+  }, { passive: false });
 
   // Wheel: horizontal = pan, alt+vertical = zoom at pointer, plain vertical = page scroll.
   browser.addEventListener('wheel', (e) => {
@@ -629,6 +778,7 @@ export function createViewer(store: Store, defaultPosition: string): Viewer {
   const ro = new ResizeObserver(() => {
     const w = Math.floor(axisData.clientWidth);
     if (w > 0 && w !== store.dataWidth) {
+      for (const r of rows.values()) r.labelLines = 0;   // widths changed: refit every label
       store.dataWidth = w;
       store.setView(store.view); // re-clamp zoom limits for the new width
       syncToolbar();
@@ -636,6 +786,17 @@ export function createViewer(store: Store, defaultPosition: string): Viewer {
     }
   });
   ro.observe(axisData);
+
+  // Moving the window to a screen with a different pixel density: redraw sharply and refit labels.
+  const watchPixelRatio = () => {
+    const mq = window.matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`);
+    mq.addEventListener('change', () => {
+      for (const r of rows.values()) r.labelLines = 0;
+      scheduleRender();
+      watchPixelRatio();          // re-arm for the new density
+    }, { once: true });
+  };
+  watchPixelRatio();
 
   store.subscribe((what) => {
     if (what === 'view') { closePopup(); syncToolbar(); }
