@@ -1,0 +1,94 @@
+Multi-modal functional viewer for the LDLR non-coding landscape
+Version 1.0.1
+
+Copyright (C) 2026 The Regents of the University of Michigan
+Emmer Lab
+
+This viewer (the TypeScript sources in src/ and shared/, the build scripts,
+and the Python data-preparation code in py_data_manip/) is free software:
+you can redistribute it and/or modify it under the terms of the GNU General
+Public License as published by the Free Software Foundation, either version 3
+of the License, or (at your option) any later version. See LICENSE for the
+full license text.
+
+
+Third-party components
+----------------------
+
+The built viewer (a single HTML file) contains no third-party runtime code.
+The following software is used only to build, test, or prepare data for it.
+These components are not included in or modified by this repository. Each is
+installed separately and is distributed under its own license.
+
+Build and test (npm)
+
+  Vite
+    License: MIT
+    https://vitejs.dev
+
+  vite-plugin-singlefile
+    License: MIT
+    https://github.com/richardtallent/vite-plugin-singlefile
+
+  TypeScript
+    License: Apache-2.0
+    https://www.typescriptlang.org
+
+  markdown-it
+    License: MIT
+    https://github.com/markdown-it/markdown-it
+
+  tsx
+    License: MIT
+    https://github.com/privatenumber/tsx
+
+  Vitest
+    License: MIT
+    https://vitest.dev
+
+  jsdom
+    License: MIT
+    https://github.com/jsdom/jsdom
+
+Data preparation (Python, py_data_manip/)
+
+  NumPy
+    License: BSD-3-Clause
+    https://numpy.org
+
+  pandas
+    License: BSD-3-Clause
+    https://pandas.pydata.org
+
+  pyfaidx
+    License: BSD-3-Clause
+    https://github.com/mdshw5/pyfaidx
+
+  Requests
+    License: Apache-2.0
+    https://requests.readthedocs.io
+
+  Matplotlib
+    License: Matplotlib License (PSF-based)
+    https://matplotlib.org
+
+  openpyxl
+    License: MIT
+    https://openpyxl.readthedocs.io
+
+  JupyterLab and ipykernel
+    License: BSD-3-Clause
+    https://jupyter.org
+
+  pytest
+    License: MIT
+    https://pytest.org
+
+
+Genome data
+-----------
+
+genome/chrom.sizes and genome/hg38_ldlr_region.fa are derived from the
+GRCh38/hg38 human reference assembly, obtained from the UCSC Genome Browser
+(https://genome.ucsc.edu). genome/demo_sequence.fa is randomly generated
+sequence, not real genome data.
