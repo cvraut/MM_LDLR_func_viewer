@@ -1,0 +1,1 @@
+Discrete evolutionarily conserved elements identified from the 100-vertebrate PhastCons analysis. These intervals identify broadly conserved sequence but do not establish regulatory activity at the LDLR locus.

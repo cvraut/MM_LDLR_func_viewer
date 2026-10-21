@@ -5,6 +5,7 @@ genome-browser.zip
 tracks/emmer_data
 tracks/raw_emmer
 tracks/ucsc_raw
+tracks/test_tracks/aou*
 
 # node
 node_modules/

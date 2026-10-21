@@ -1,0 +1,1 @@
+Discrete evolutionarily conserved elements identified from the 30-primate PhastCons analysis. These intervals summarize stretches of primate-conserved sequence rather than functional activity measured in HuH7 cells.

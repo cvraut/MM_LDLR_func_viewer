@@ -1,1 +1,1 @@
-Positions targeted by CRISPR Cas9 guides enriched for lowering LDL uptake in cells.
+One-sided empirical significance of gRNA depletion in the LDL-high relative to LDL-low population, aggregated over 100-bp windows and displayed as −log<sub>10</sub>(<i>p</i>). Higher values indicate stronger evidence that nuclease disruption of the region decreases LDL uptake, consistent with disruption of a positive regulator of LDLR expression or activity.

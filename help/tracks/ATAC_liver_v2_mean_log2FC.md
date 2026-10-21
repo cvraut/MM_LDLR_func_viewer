@@ -1,0 +1,1 @@
+Mean log₂-transformed assay for transposase-accessible chromatin using sequencing (ATAC-seq) signal from publicly available human liver experiments. Higher signal indicates greater chromatin accessibility, a feature frequently associated with cis-regulatory activity.

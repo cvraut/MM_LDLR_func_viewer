@@ -8,6 +8,14 @@
 import type { HelpBundle, TocEntry } from '../../shared/types';
 import { helpHash } from '../router';
 
+/** Credit and feedback links at the bottom of the Help page. */
+const AUTHOR = 'Chinmay Raut';
+const LAB_NAME = 'Emmer Lab';
+const LAB_URL = 'https://emmer.lab.medicine.umich.edu/home';
+const ISSUES_URL = 'https://github.com/cvraut/MM_LDLR_func_viewer/issues/new';
+const FEEDBACK_EMAIL = 'craut@umich.edu';
+const FEEDBACK_SUBJECT = 'LDLR viewer feedback';
+
 export interface HelpPage {
   el: HTMLElement;
   show(anchor: string | null): void;
@@ -29,7 +37,14 @@ export function createHelpPage(help: HelpBundle): HelpPage {
         ${tocHtml(help.toc)}
       </details>
     </nav>
-    <article class="help-content">${help.html}</article>`;
+    <article class="help-content">${help.html}</article>
+    <footer class="help-footer">
+      <p>Built by ${AUTHOR} for the <a href="${LAB_URL}" target="_blank" rel="noopener">${LAB_NAME}</a>.</p>
+      <div class="help-footer-actions">
+        <a class="btn" href="${ISSUES_URL}" target="_blank" rel="noopener">Report an issue on GitHub</a>
+        <a class="btn" href="mailto:${FEEDBACK_EMAIL}?subject=${encodeURIComponent(FEEDBACK_SUBJECT)}">Email feedback</a>
+      </div>
+    </footer>`;
   if (window.matchMedia('(max-width: 700px)').matches) {
     el.querySelector<HTMLDetailsElement>('.toc-details')!.open = false;
   }

@@ -1,0 +1,1 @@
+Consensus human liver DHS-seq peaks, defined as coordinates called as peaks in at least 50% of contributing experiments. These intervals mark reproducibly DNase-accessible chromatin and were most strongly associated with CRISPRn peaks among the functional assays.

@@ -1,0 +1,1 @@
+Consensus human liver H3K4me1 ChIP-seq peaks, defined as coordinates called in at least 50% of contributing experiments. These intervals nominate potential enhancer regions but showed relatively modest predictive performance for the functional assays.

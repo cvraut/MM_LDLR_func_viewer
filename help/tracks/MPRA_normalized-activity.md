@@ -1,0 +1,1 @@
+Relative reporter activity across the locus, calculated at each genomic coordinate as the average activity of overlapping 129-bp MPRA tiles. Positive values indicate increased reporter expression and negative values indicate decreased reporter expression relative to the random-sequence controls.

@@ -20,7 +20,7 @@ export interface Track {
 }
 
 /** Name used in the hidden-tracks tray and menus, even when the label is empty. */
-export const displayName = (t: Track) => t.style.label || t.file;
+export const displayName = (t: Track) => t.style.label || t.style.missingParentName || t.file;
 
 export function buildTracks(bundle: Bundle): Track[] {
   const out: Track[] = [];

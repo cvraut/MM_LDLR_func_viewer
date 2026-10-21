@@ -1,0 +1,1 @@
+Contiguous regions significantly depleted in the CRISPRa screen, defined by merged 100-bp windows with Benjamini–Hochberg-adjusted empirical <i>p</i> ≤ 0.01. The study identified three regions with this direction of effect.

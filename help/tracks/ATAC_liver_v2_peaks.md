@@ -1,0 +1,1 @@
+Consensus human liver ATAC-seq peaks, defined in the study as coordinates called as peaks in at least 50% of contributing experiments. These intervals mark reproducibly accessible chromatin and were the strongest tested predictor of CRISPRn activity.

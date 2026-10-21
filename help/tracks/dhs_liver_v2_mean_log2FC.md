@@ -1,0 +1,1 @@
+Mean DNase I hypersensitive-site sequencing (DHS-seq) signal from publicly available human liver experiments. Higher signal indicates chromatin that is more accessible to DNase I cleavage and is often associated with regulatory elements.

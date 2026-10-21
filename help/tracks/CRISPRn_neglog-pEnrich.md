@@ -1,0 +1,1 @@
+One-sided empirical significance of gRNA enrichment in the LDL-high relative to LDL-low population, aggregated over 100-bp windows and displayed as −log<sub>10</sub>(<i>p</i>). Higher values indicate stronger evidence that nuclease disruption of the region increases LDL uptake, consistent with disruption of a negative regulator.

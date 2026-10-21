@@ -1,0 +1,1 @@
+Candidate cis-regulatory elements (cCREs) from the ENCODE3 release overlapping the displayed region. These are computationally nominated regulatory elements based on biochemical genomic signatures and should be interpreted as predictions rather than direct functional validation.

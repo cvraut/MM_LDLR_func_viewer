@@ -1,0 +1,1 @@
+Contiguous regions significantly depleted in the CRISPRn screen after merging overlapping 100-bp windows with Benjamini–Hochberg-adjusted empirical \(p \leq 0.01\). These peaks nominate regions whose nuclease-mediated disruption reduces LDL uptake.

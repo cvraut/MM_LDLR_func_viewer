@@ -134,8 +134,8 @@ function fmt(n: number): string {
 
 function factsBox(t: TrackBundle): string {
   const rows: [string, string][] = [
-    ['Source file', `<code>${esc(t.file)}</code>`],
-    ['Format', t.format === 'bed' ? `BED${t.stats.bedFields ?? ''}` : t.format],
+    // ['Source file', `<code>${esc(t.file)}</code>`],
+    // ['Format', t.format === 'bed' ? `BED${t.stats.bedFields ?? ''}` : t.format],
     [t.kind === 'signal' ? 'Data intervals' : 'Features', fmt(t.stats.count)],
     ['Chromosomes', esc(t.stats.chroms.slice(0, 6).join(', ') + (t.stats.chroms.length > 6 ? ` and ${t.stats.chroms.length - 6} more` : ''))],
   ];
@@ -194,10 +194,10 @@ ${facts}${body}</section>`;
   if (opts.sequence) {
     const seq = opts.sequence;
     const bases = seq.records.reduce((a, r) => a + r.length, 0);
-    const facts = `<dl class="facts"><dt>Source file</dt><dd><code>${esc(seq.file)}</code></dd><dt>Format</dt><dd>FASTA</dd><dt>Bases</dt><dd>${fmt(bases)}</dd><dt>Regions</dt><dd>${seq.records.map((r) => `${esc(r.chrom)}:${fmt(r.offset + 1)}-${fmt(r.offset + r.length)}`).join(', ')}</dd></dl>`;
+    const facts = `<dl class="facts"><!-- dt>Source file</dt><dd><code>${esc(seq.file)}</code></dd --><!-- dt>Format</dt><dd>FASTA</dd --><dt>Bases</dt><dd>${fmt(bases)}</dd><dt>Regions</dt><dd>${seq.records.map((r) => `${esc(r.chrom)}:${fmt(r.offset + 1)}-${fmt(r.offset + r.length)}`).join(', ')}</dd></dl>`;
     section('sequence', seq.label, '#5b5f66', facts, 'sequence');
   }
-  for (const t of opts.tracks) section(t.id, t.style.label || t.file, t.style.color, factsBox(t), t.id);
+  for (const t of opts.tracks) section(t.id, t.style.label || t.style.missingParentName || t.file, t.style.color, factsBox(t), t.id);
 
   if (missing.length) ctx.warnings.push(`No help text yet for: ${missing.join(', ')} (auto facts box shown instead).`);
 

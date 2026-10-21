@@ -1,0 +1,1 @@
+Contiguous regions significantly depleted in the CRISPRi screen, defined by merged 100-bp windows with Benjamini–Hochberg-adjusted empirical <i>p</i> ≤ 0.01. These peaks substantially overlap CRISPRn depletion peaks and nominate regions that support LDLR expression or activity.

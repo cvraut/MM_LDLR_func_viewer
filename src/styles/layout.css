@@ -286,6 +286,16 @@ canvas { display: block; }
   .only-mouse { display: none; }
 }
 
+.help-footer {
+  grid-column: 2; max-width: 72ch;          /* under the content, not the contents sidebar */
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--hairline);
+  color: var(--muted); font-size: 13px;
+}
+.help-footer p { margin: 0; }
+.help-footer .btn { text-decoration: none; color: var(--ink); }
+.help-footer-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
 /* -------------------------------------------------------- small screens -- */
 @media (max-width: 845px) {
   .pos-input { width: 200px; }
@@ -294,6 +304,7 @@ canvas { display: block; }
   .page-help { grid-template-columns: 1fr; gap: 16px; }
   .toc { position: static; max-height: none; }
   .track-label { right: 50px; max-width: calc(var(--gutter-width) - 54px); }
+  .help-footer { grid-column: auto; }
 }
 
 .toc summary { cursor: pointer; }

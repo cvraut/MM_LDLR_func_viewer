@@ -1,0 +1,1 @@
+One-sided empirical significance of gRNA depletion in the LDL-high relative to LDL-low population following recruitment of transcriptional activators, aggregated over 100-bp windows and shown as −log<sub>10</sub>(<i>p</i>). Higher values indicate that CRISPRa targeting unexpectedly reduces LDL uptake.

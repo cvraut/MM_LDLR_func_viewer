@@ -1,0 +1,1 @@
+Regions formed by merging overlapping or abutting MPRA tiles with reporter activity significantly above the random-control distribution at Benjamini–Hochberg-adjusted <i>p</i> &lt; 0.01. These “enhancer” peaks identify sequences sufficient to increase reporter expression outside their native genomic context.

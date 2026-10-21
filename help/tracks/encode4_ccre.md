@@ -1,0 +1,1 @@
+Candidate cis-regulatory elements from the expanded ENCODE4 release overlapping the displayed region. This newer catalog nominates more regions than ENCODE3, but most predicted regions in this study were not supported by significant activity in any individual functional assay.

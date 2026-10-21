@@ -1,0 +1,1 @@
+Mean log₂-transformed human liver chromatin immunoprecipitation sequencing (ChIP-seq) signal for H3K27ac, a histone modification associated with active promoters and enhancers. Higher values indicate stronger H3K27ac enrichment across the locus.

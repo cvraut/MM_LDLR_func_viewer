@@ -1,0 +1,1 @@
+Contiguous regions significantly enriched in the CRISPRn screen after merging overlapping 100-bp windows with Benjamini–Hochberg-adjusted empirical <i>p</i> ≤ 0.01. The study identified only one such region, indicating relatively little evidence for repressive elements by CRISPRn.

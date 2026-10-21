@@ -1,0 +1,1 @@
+Regions formed by merging overlapping or abutting MPRA tiles with reporter activity significantly below the random-control distribution at Benjamini–Hochberg-adjusted <i>p</i> &lt; 0.01. These “repressor” peaks identify sequences sufficient to reduce reporter expression in the assay.

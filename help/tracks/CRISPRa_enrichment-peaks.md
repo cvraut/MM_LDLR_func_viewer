@@ -1,0 +1,1 @@
+Contiguous regions significantly enriched in the CRISPRa screen, defined by merged 100-bp windows with Benjamini–Hochberg-adjusted empirical <i>p</i> ≤ 0.01. These peaks were concentrated primarily in the 5′ intergenic region and were largely distinct from CRISPRn and CRISPRi peaks.

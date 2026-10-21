@@ -1,0 +1,1 @@
+Canonical protein-coding gene models across the displayed GRCh38/hg38 interval. Boxes show exons, connecting lines represent introns, and arrows correspond to transcriptional orientation.
