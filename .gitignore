@@ -1,5 +1,6 @@
 # claude artifacts
 genome-browser.zip
+.claudeignore
 
 # undisclosed data
 tracks/emmer_data
